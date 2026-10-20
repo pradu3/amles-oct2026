@@ -1,0 +1,1167 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Building Data-Driven Software in the Era of Generative AI</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reset.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/theme/black.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    :root {
+      --sap-blue: #0070f2;
+      --sap-gold: #f0ab00;
+      --sap-dark: #1a1a2e;
+    }
+    .reveal { font-family: "72", "SAP-icons", Arial, sans-serif; }
+    .reveal h1, .reveal h2, .reveal h3 { color: #ffffff; text-transform: none; }
+    .reveal h2 { color: var(--sap-gold); }
+    .reveal h3 { color: #a0d4ff; }
+    .sap-badge {
+      display: inline-block;
+      background: var(--sap-blue);
+      color: white;
+      border-radius: 4px;
+      padding: 2px 10px;
+      font-size: 0.65em;
+      vertical-align: middle;
+      margin-left: 8px;
+    }
+    .pal-badge {
+      background: #e8a838;
+      color: #1a1a2e;
+    }
+    .reveal pre code { max-height: 58vh; font-size: 0.75em; line-height: 1.4; }
+    .reveal pre { overflow-x: auto; max-width: 100%; box-sizing: border-box; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 2em; }
+    .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5em; }
+    .card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 8px;
+      padding: 1em;
+      font-size: 0.8em;
+    }
+    .card h4 { color: var(--sap-gold); margin: 0 0 0.5em; font-size: 1em; }
+    .highlight { color: var(--sap-gold); font-weight: bold; }
+    .tag {
+      display: inline-block;
+      background: rgba(0,112,242,0.3);
+      border: 1px solid var(--sap-blue);
+      border-radius: 12px;
+      padding: 3px 12px;
+      font-size: 0.7em;
+      margin: 3px;
+    }
+    .schedule-row {
+      display: flex;
+      align-items: center;
+      gap: 1em;
+      margin: 0.4em 0;
+      font-size: 0.8em;
+    }
+    .schedule-time {
+      background: var(--sap-blue);
+      border-radius: 4px;
+      padding: 2px 8px;
+      min-width: 9em;
+      text-align: center;
+      font-weight: bold;
+    }
+    .schedule-lunch { background: #555; }
+    .progress-bar-wrap { background: rgba(255,255,255,0.1); border-radius: 4px; height: 6px; margin-top: 0.3em; }
+    .progress-fill { background: var(--sap-blue); height: 6px; border-radius: 4px; }
+    .objective-list li { margin: 0.5em 0; }
+    .reveal .slides section.title-slide { background: radial-gradient(ellipse at top, #0d2137 0%, #000 80%); }
+    .speaker-note-hint { font-size: 0.5em; color: #888; font-style: italic; margin-top: 1.5em; }
+    table.pal-table { font-size: 0.65em; width: 100%; border-collapse: collapse; }
+    table.pal-table th { background: var(--sap-blue); padding: 5px 8px; }
+    table.pal-table td { padding: 4px 8px; border-bottom: 1px solid rgba(255,255,255,0.1); line-height: 1.3; }
+    table.pal-table tr:nth-child(even) td { background: rgba(255,255,255,0.04); }
+  </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- TITLE -->
+<section class="title-slide" data-background-gradient="radial-gradient(ellipse at top, #0d2137 0%, #000 80%)">
+  <h1 style="font-size:1.6em; line-height:1.2;">Applied Machine Learning for Engineering Systems</h1>
+  <p style="color:#a0d4ff; margin-top:0.5em;">A master's course hosted by SAP</p>
+  <p style="font-size:0.7em; color:#888;">Engineering in Foreign Languages Faculty &bull; National University of Science and Technology POLITEHNICA Bucharest &bull; 2026 - 2027</p>
+  <hr style="border-color:rgba(255,255,255,0.2); margin:1.5em auto; width:60%;">
+  <div style="font-size:0.65em; color:#aaa;">
+    <span class="tag">SAP HANA Cloud</span>
+    <span class="tag">PAL</span>
+    <span class="tag">Embeddings</span>
+    <span class="tag">ClinicalTrials.gov</span>
+    <span class="tag">Python</span>
+    <span class="tag">LLM</span>
+  </div>
+</section>
+
+<!-- DISCLAIMER -->
+<section data-background-color="#0a0a0a">
+  <h2 style="font-size:1em; color:#888; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:1.2em;">Disclaimer</h2>
+  <p style="font-size:0.78em; color:#aaa; line-height:1.9; max-width:800px; margin:0 auto;">
+    The views and opinions expressed in this presentation are my own and do not necessarily reflect
+    the official policy or position of SAP or its affiliates. Any content shared is based on my
+    personal perspective and should not be interpreted as representing SAP's views, strategies, or opinions.
+  </p>
+</section>
+
+<!-- AGENDA -->
+<section>
+  <h2>Today's Agenda</h2>
+  <ul>
+    <li>Setting up the HANA Trial account</li>
+    <li>The Dataset: ClinicalTrials.gov API</li>
+    <li>SAP HANA Cloud Architecture</li>
+    <li><b>Exercise 1</b> — Fetch &amp; Load Data</li>
+    <li>NLP &amp; Embedding Models in HANA</li>
+    <li><b>Exercise 2</b> — Semantic Search</li>
+    <li>Predictive Analysis Library (PAL)</li>
+    <li>LLM Integration &amp; GenAI Patterns</li>
+    <li>Continue with the profiles from last time</li>
+    <li>Wrap-up &amp; Q&amp;A</li>
+  </ul>
+</section>
+
+<!-- OBJECTIVES -->
+<section>
+  <h2>Learning Objectives</h2>
+  <ul class="objective-list" style="font-size:0.82em;">
+    <li>Query a real-world REST API and understand its data model</li>
+    <li>Load and query data in <span class="highlight">SAP HANA Cloud</span> using Python</li>
+    <li>Generate <span class="highlight">vector embeddings</span> with HANA's built-in NLP models</li>
+    <li>Perform <span class="highlight">semantic similarity search</span> on medical text</li>
+    <li>Train a machine-learning model with <span class="highlight">PAL</span> — entirely inside the database</li>
+    <li>Predict <span class="highlight">clinical-trial dropout rate</span> from structured features</li>
+    <li>Understand how <span class="highlight">LLMs</span> complement in-database analytics</li>
+  </ul>
+</section>
+
+<!-- REPOSITORY -->
+<section data-background-gradient="radial-gradient(ellipse at top left, #001a33 0%, #000 80%)">
+  <h2>Materials</h2>
+  <div class="two-col" style="align-items:center; gap:3em; margin-top:0.5em;">
+    <div style="text-align:left;">
+      <p style="font-size:0.85em; margin:0 0 0.5em;">
+        <span style="color:#888;">GitHub</span><br>
+        <a href="https://github.com/pradu3/amles-oct2026/round-2"
+           style="color:var(--sap-gold); font-size:1.1em; word-break:break-all;">
+          github.com/pradu3/<br>amles-oct2026/round-2
+        </a>
+      </p>
+      <div style="margin-top:1.2em; font-size:0.72em; color:#aaa; line-height:1.8;">
+        <div><span class="tag">exercises/</span> — placeholder </div>
+        <div><span class="tag">slides/</span> — this presentation</div>
+        <div><span class="tag">README.md</span> — HANA trial + env setup</div>
+      </div>
+    </div>
+    <div style="text-align:center;">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=https://github.com/pradu3/amles-oct2026/round-2&color=ffffff&bgcolor=000000"
+           alt="QR code for repository"
+           style="border-radius:8px; border:2px solid rgba(255,255,255,0.2);">
+      <p style="font-size:0.6em; color:#666; margin-top:0.5em;">Scan to open on your phone</p>
+    </div>
+  </div>
+</section>
+
+<!-- TRIAL SETUP 1 -->
+<section data-background-gradient="radial-gradient(ellipse at top, #0d2137 0%, #000 80%)">
+  <h2 style="margin-bottom:0.3em;">Get Your SAP HANA Cloud Trial</h2>
+  <p style="font-size:0.72em; color:#a0d4ff; margin-bottom:0.6em;">Free, no credit card required — takes ~5 minutes</p>
+  <div style="display:grid; grid-template-columns:1fr 1fr auto; gap:1.2em; align-items:start; font-size:0.76em;">
+    <div class="card" style="padding:0.7em;">
+      <h4>Step 1 — Sign up</h4>
+      <p style="margin:0.3em 0;">Go to the URL, click <b>"Try now"</b>, register with your university email.</p>
+      <p style="color:var(--sap-gold); margin:0.4em 0 0; font-size:0.9em; word-break:break-all;">sap.com/products/<br>data-cloud/hana/trial.html</p>
+    </div>
+    <div class="card" style="padding:0.7em;">
+      <h4>Step 2 — Open DBX</h4>
+      <p style="margin:0.3em 0;">In the workbook:<br><b>Getting Started →<br>Logging into Database Explorer</b></p>
+      <p style="margin:0.4em 0 0; color:#aaa; font-size:0.9em;">Credentials are shown on screen and sent to your email.</p>
+    </div>
+    <div style="text-align:center; padding-top:0.3em;">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https://www.sap.com/products/data-cloud/hana/trial.html&color=ffffff&bgcolor=000000"
+           alt="QR code for HANA trial"
+           style="border-radius:6px; border:2px solid rgba(255,255,255,0.2); display:block;">
+      <p style="font-size:0.6em; color:#666; margin:0.3em 0 0;">Scan to open</p>
+    </div>
+  </div>
+</section>
+
+<!-- TRIAL SETUP 2 -->
+<section>
+  <h2 style="margin-bottom:0.3em;">Find Your Connection Details</h2>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.2em; font-size:0.78em; align-items:start; margin-top:0.3em;">
+    <div class="card" style="padding:0.7em;">
+      <h4>Get your Host</h4>
+      <p style="margin:0.3em 0;">Right-click your instance in DBX left panel → <b>Properties</b><br>
+      Copy the <b>Host</b> field:</p>
+      <code style="color:var(--sap-gold); font-size:0.85em;">abc123.hanacloud.ondemand.com</code>
+    </div>
+    <div>
+      <table class="pal-table" style="font-size:0.9em;">
+        <tr><th>Variable</th><th>Where to find it</th></tr>
+        <tr><td><code>HANA_HOST</code></td><td>Host from Properties</td></tr>
+        <tr><td><code>HANA_PORT</code></td><td><code>443</code></td></tr>
+        <tr><td><code>HANA_USER</code></td><td>Username in workbook / email</td></tr>
+        <tr><td><code>HANA_PASSWORD</code></td><td>Password in workbook / email</td></tr>
+      </table>
+      <p style="font-size:0.72em; color:#aaa; margin-top:0.5em;">Put these in a <code>.env</code> file — see <b>README.md</b> for the template.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TRIAL SETUP 3 -->
+<section>
+  <h2 style="margin-bottom:0.3em;">Verify Your Setup</h2>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5em; align-items:start; margin-top:0.3em;">
+    <div>
+      <p style="font-size:0.72em; color:#aaa; margin:0 0 0.3em;">Run once after cloning and creating <code>.env</code>:</p>
+      <pre style="margin:0; font-size:0.7em;"><code class="language-bash">python exercises/verify_connection.py</code></pre>
+    </div>
+    <div>
+      <p style="font-size:0.72em; color:#aaa; margin:0 0 0.3em;">Expected output:</p>
+      <pre style="margin:0; font-size:0.7em;"><code class="language-bash">Connected — SAP HANA Cloud 4.x.x
+PAL: available ✓
+Vector embeddings: available ✓
+
+Available embedding models:
+  SAP_GXY (version: 20250407 | dims: 768)</code></pre>
+    </div>
+  </div>
+  <div class="card" style="margin-top:0.8em; font-size:0.7em; padding:0.6em 1em;">
+    If PAL or embeddings show ✗, check your credentials in <code>.env</code>. Full troubleshooting in <b>README.md</b>.
+  </div>
+</section>
+
+<!-- WHY CLINICAL TRIALS -->
+<section>
+  <h2>Why Clinical Trials?</h2>
+  <div class="two-col" style="margin-top:1em;">
+    <div class="card">
+      <h4>The Scale</h4>
+      <ul style="font-size:0.9em;">
+        <li><span class="highlight">500 000+</span> studies registered worldwide</li>
+        <li>Covers 220+ countries</li>
+        <li>Updated daily via public API</li>
+        <li>Free, well-documented, real data</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>The Problem</h4>
+      <ul style="font-size:0.9em;">
+        <li>~<span class="highlight">30%</span> of trials fail due to enrollment issues</li>
+        <li>Dropout costs $<span class="highlight">600M</span>+ per failed Phase III trial</li>
+        <li>Predicting dropout early saves lives &amp; resources</li>
+        <li>Perfect use case for in-database ML</li>
+      </ul>
+    </div>
+  </div>
+  <p style="font-size:0.65em; margin-top:1.5em; color:#888;">Source: JAMA Internal Medicine, 2023 / Tufts CSDD</p>
+</section>
+
+<!-- CLINICALTRIALS API — with callouts -->
+<section>
+  <h2 style="margin-bottom:0.15em;">ClinicalTrials.gov API</h2>
+  <p style="font-size:0.78em; color:#aaa; margin-bottom:0.4em;">Public REST API — no authentication required</p>
+
+  <!-- callout area: fixed height so the code block never shifts -->
+  <div style="position:relative; height:80px; margin-bottom:0.45em; font-size:0.78em;">
+    <p class="fragment fade-out" data-fragment-index="1" style="position:absolute; width:100%; margin:0; top:50%; transform:translateY(-50%); color:#555; font-style:italic; text-align:center;">click to explore the parameters →</p>
+    <div class="fragment fade-in-then-out" data-fragment-index="1" style="position:absolute; width:100%; top:0; left:0;">
+      <div class="card" style="border-color:#a0d4ff; display:flex; gap:1.2em; align-items:center; padding:0.55em 1em;">
+        <span style="color:#a0d4ff; font-weight:bold; white-space:nowrap; min-width:9em;">Base URL</span>
+        <span>All v2 requests start here. Returns JSON with a <code>studies</code> array. The v1 API was retired in 2024.</span>
+      </div>
+    </div>
+    <div class="fragment fade-in-then-out" data-fragment-index="2" style="position:absolute; width:100%; top:0; left:0;">
+      <div class="card" style="border-color:var(--sap-gold); display:flex; gap:1.2em; align-items:center; padding:0.55em 1em;">
+        <code style="color:var(--sap-gold); font-weight:bold; white-space:nowrap; min-width:9em;">query.cond</code>
+        <span>Condition or disease. Accepts MeSH terms, free text, or synonyms — e.g. <code>alopecia</code>, <code>type 2 diabetes</code>, <code>"heart failure"</code></span>
+      </div>
+    </div>
+    <div class="fragment fade-in-then-out" data-fragment-index="3" style="position:absolute; width:100%; top:0; left:0;">
+      <div class="card" style="border-color:#7ec8e3; display:flex; gap:1.2em; align-items:center; padding:0.55em 1em;">
+        <code style="color:#7ec8e3; font-weight:bold; white-space:nowrap; min-width:9em;">filter.overallStatus</code>
+        <span>Study lifecycle stage: <code>COMPLETED</code> · <code>RECRUITING</code> · <code>ACTIVE_NOT_RECRUITING</code> · <code>TERMINATED</code></span>
+      </div>
+    </div>
+    <div class="fragment fade-in-then-out" data-fragment-index="4" style="position:absolute; width:100%; top:0; left:0;">
+      <div class="card" style="border-color:#f0c060; display:flex; gap:1.2em; align-items:center; padding:0.55em 1em;">
+        <code style="color:#f0c060; font-weight:bold; white-space:nowrap; min-width:9em;">filter.phase</code>
+        <span>Trial phase: <code>EARLY_PHASE1</code> · <code>PHASE1</code> · <code>PHASE2</code> · <code>PHASE3</code> · <code>PHASE4</code> · <code>NA</code></span>
+      </div>
+    </div>
+    <div class="fragment fade-in-then-out" data-fragment-index="5" style="position:absolute; width:100%; top:0; left:0;">
+      <div class="card" style="border-color:#a0d4ff; display:flex; gap:1.2em; align-items:center; padding:0.55em 1em;">
+        <code style="color:#a0d4ff; font-weight:bold; white-space:nowrap; min-width:9em;">fields</code>
+        <span>Comma-separated module names. Limits payload — only fetch what you need. Omit to get all ~40 fields per study.</span>
+      </div>
+    </div>
+    <div class="fragment" data-fragment-index="6" style="position:absolute; width:100%; top:0; left:0;">
+      <div class="card" style="border-color:#7ec8e3; display:flex; gap:1.2em; align-items:center; padding:0.55em 1em;">
+        <code style="color:#7ec8e3; font-weight:bold; white-space:nowrap; min-width:9em;">pageSize</code>
+        <span>Max <b>1000</b> per page. Response includes <code>nextPageToken</code> — pass it as <code>&amp;pageToken=…</code> to fetch the next page.</span>
+      </div>
+    </div>
+  </div>
+
+  <pre style="margin:0;"><code class="language-bash" data-line-numbers>
+# Base URL (v2)
+https://clinicaltrials.gov/api/v2/studies
+
+# Fetch 10 completed Phase 3 alopecia trials
+GET /api/v2/studies
+  ?query.cond=alopecia
+  &filter.overallStatus=COMPLETED
+  &filter.phase=PHASE3
+  &fields=identificationModule,statusModule,designModule,eligibilityModule
+  &pageSize=10
+  </code></pre>
+  <div style="font-size:0.7em; margin-top:0.6em;">
+    <span class="tag">JSON response</span>
+    <span class="tag">Pagination via nextPageToken</span>
+    <span class="tag">~500k studies</span>
+  </div>
+</section>
+
+<!-- KEY DATA MODULES -->
+<section>
+  <h2 style="margin-bottom:0.3em;">Key Data Modules</h2>
+  <table class="pal-table" style="font-size:clamp(0.48em, 1.4vw, 0.65em); width:100%;">
+    <colgroup>
+      <col style="width:30%">
+      <col style="width:45%">
+      <col style="width:25%">
+    </colgroup>
+    <tr><th>Module</th><th>Useful Fields</th><th>Our Use</th></tr>
+    <tr><td>identificationModule</td><td>nctId, title, orgStudyId</td><td>Primary key / display</td></tr>
+    <tr><td>statusModule</td><td>overallStatus, startDate, completionDate</td><td>Duration, target variable</td></tr>
+    <tr><td>designModule</td><td>studyType, phases, enrollment.count, enrollment.type</td><td>Features</td></tr>
+    <tr><td>eligibilityModule</td><td>minimumAge, maximumAge, sex, healthyVolunteers, criteria</td><td>Features + NLP embedding</td></tr>
+    <tr><td>sponsorCollaboratorsModule</td><td>leadSponsor.class (NIH / Industry / Other)</td><td>Feature</td></tr>
+    <tr><td>armsInterventionsModule</td><td>arms count, intervention types</td><td>Feature</td></tr>
+    <tr><td>outcomesModule</td><td>primaryOutcomes, secondaryOutcomes counts</td><td>Feature</td></tr>
+  </table>
+</section>
+
+<!-- DATA PIPELINE DIAGRAM -->
+<section>
+  <h2 style="margin-bottom:0.2em;">Data Ingestion Pipeline</h2>
+  <p style="font-size:0.7em; color:#aaa; margin-bottom:0.5em;">paginated fetch → projection → local store</p>
+  <div class="mermaid">
+%%{init: {'theme': 'base', 'themeVariables': {
+  'primaryColor': '#0d2a45',
+  'primaryTextColor': '#c8e0ff',
+  'primaryBorderColor': '#0070f2',
+  'lineColor': '#7ec8e3',
+  'secondaryColor': '#0d2a45',
+  'tertiaryColor': '#071826',
+  'edgeLabelBackground': '#071826',
+  'clusterBkg': '#071826',
+  'clusterBorder': '#0070f2',
+  'titleColor': '#c8e0ff',
+  'nodeTextColor': '#c8e0ff',
+  'fontFamily': 'Arial, sans-serif'
+}}}%%
+flowchart LR
+    CT["ClinicalTrials.gov\nAPI v2\n\n~500k studies\nREST · JSON · paginated"]
+
+    subgraph box ["  Fetch Loop + Projection  "]
+        direction TB
+        REQ["GET /api/v2/studies\n?query.cond=…\n&amp;pageSize=100\n&amp;pageToken=…"]
+        PAGE["Page N\nstudies&#91;0…99&#93;\nnextPageToken"]
+        PROJ["Projection\nnct_id · phase · enrollment\nduration · sponsor · criteria_text"]
+        REQ --> PAGE
+        PAGE -- "nextPageToken ≠ null" --> REQ
+        PAGE --> PROJ
+    end
+
+    REPO[("Local\nRepository\n?")]
+
+    CT -- "HTTPS GET" --> REQ
+    PROJ -- "append rows" --> REPO
+
+    classDef server fill:#001f40,stroke:#0070f2,stroke-width:2px,color:#a0d4ff,font-size:13px
+    classDef repo   fill:#1c1400,stroke:#f0ab00,stroke-width:2px,color:#f0d080,font-size:14px
+    class CT server
+    class REPO repo
+  </div>
+</section>
+
+<!-- SAP HANA CLOUD -->
+<section data-background-gradient="radial-gradient(ellipse at top left, #001a33 0%, #000 80%)">
+  <h2>SAP HANA Cloud</h2>
+  <p style="font-size:0.78em; color:#a0d4ff;">The in-memory, multi-model, AI-ready database</p>
+  <div class="three-col" style="margin-top:1em;">
+    <div class="card">
+      <h4>In-Memory Engine</h4>
+      <p>Column-store, row-store. Data lives in RAM for sub-second analytics on millions of rows.</p>
+    </div>
+    <div class="card">
+      <h4>Multi-Model</h4>
+      <p>Relational, graph, spatial, JSON/document, and <b>vector</b> — all in one engine, one SQL dialect.</p>
+    </div>
+    <div class="card">
+      <h4>Built-in ML</h4>
+      <p>PAL (Predictive Analysis Library) &amp; APL run ML algorithms as SQL stored procedures — data never leaves the DB.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HANA CLOUD ARCHITECTURE -->
+<section>
+  <h2 style="margin-bottom:0.4em;">HANA Cloud Architecture</h2>
+  <div style="border:2px solid #fff; border-radius:6px; padding:0.7em 1em 0.5em; font-size:0.78em; max-width:820px; margin:0 auto;">
+    <p style="text-align:center; margin:0 0 0.6em; letter-spacing:0.05em; color:#ccc;">SAP HANA Cloud</p>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5em; margin-bottom:0.5em;">
+      <div style="border:1px solid #fff; border-radius:4px; padding:0.4em 0.7em; text-align:center;">Column Store<br><span style="color:#a0d4ff;">(Analytics)</span></div>
+      <div style="border:1px solid #fff; border-radius:4px; padding:0.4em 0.7em; text-align:center;">Vector Engine<br><span style="color:#a0d4ff;">REAL_VECTOR type</span></div>
+      <div style="border:1px solid #fff; border-radius:4px; padding:0.4em 0.7em; text-align:center;">PAL / APL<br><span style="color:#a0d4ff;">(In-DB ML)</span></div>
+      <div style="border:1px solid #fff; border-radius:4px; padding:0.4em 0.7em; text-align:center;">Text Analysis<br><span style="color:#a0d4ff;">+ NLP Embeddings</span></div>
+    </div>
+    <div style="border:1px solid #fff; border-radius:4px; padding:0.4em 0.7em; text-align:center;">SQL / hana-ml Python client</div>
+  </div>
+  <div style="display:flex; justify-content:space-around; margin-top:0.6em; font-size:0.7em; color:#aaa;">
+    <span>&#x2503; Python / Jupyter</span>
+    <span>&#x2503; SAP AI Core / LLM</span>
+  </div>
+</section>
+
+<!-- EXERCISE 1 -->
+<section data-background-color="#0d1f2d">
+  <h2>Exercise 1</h2>
+  <h3 style="color:#7ec8e3;">Fetch &amp; Load Clinical Trials Data</h3>
+  <ul style="font-size:0.82em; margin-top:1em;">
+    <!-- <li>Open <code>exercises/01_fetch_and_load.py</code></li> -->
+    <li>Run the ClinicalTrials API fetch for <em>two conditions</em> (alopecia, diabetes)</li>
+    <li>Engineer the <code>dropout_rate</code> target column</li>
+    <li>Load the DataFrame into HANA Cloud as table <code>CLINICAL_TRIALS</code></li>
+    <li>Verify with a simple SQL aggregation</li>
+  </ul>
+  <div class="card" style="margin-top:1.5em; font-size:0.7em;">
+    <b>Expected output:</b> a HANA table with ~900 rows and 19 columns, including a numeric dropout_rate between 0 and 1.
+  </div>
+</section>
+
+<!-- NLP IN SAP HANA CLOUD -->
+<section>
+  <h2>NLP in SAP HANA Cloud</h2>
+  <p style="font-size:0.78em; color:#a0d4ff;">Built-in text analysis and vector embeddings — no external service needed</p>
+  <div class="two-col" style="margin-top:1em;">
+    <div class="card">
+      <h4>Text Analysis</h4>
+      <ul style="font-size:0.9em;">
+        <li>Full-text indexes with linguistic analysis</li>
+        <li>Entity extraction (persons, locations, dates)</li>
+        <li>Sentiment analysis</li>
+        <li><code>CONTAINS()</code> predicate for search</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Vector Embeddings <span class="sap-badge">NEW</span></h4>
+      <ul style="font-size:0.9em;">
+        <li>Native <b>REAL_VECTOR</b> data type</li>
+        <li>Built-in <b>VECTOR_EMBEDDING()</b> function</li>
+        <li>SAP-provided multilingual embedding model</li>
+        <li>L2 / cosine / dot-product distance functions</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- REAL_VECTOR AND EMBEDDING MODELS -->
+<section>
+  <h2>REAL_VECTOR and Embedding Models</h2>
+  <pre><code class="language-sql">
+-- Create a table with a vector column
+CREATE TABLE TRIAL_EMBEDDINGS (
+    NCT_ID    VARCHAR(20) PRIMARY KEY,
+    EMBEDDING REAL_VECTOR(768)
+);
+
+-- Bulk-embed using INSERT ... SELECT with VECTOR_EMBEDDING()
+-- Runs entirely inside HANA — no data leaves the database
+INSERT INTO TRIAL_EMBEDDINGS (NCT_ID, EMBEDDING)
+SELECT NCT_ID,
+       VECTOR_EMBEDDING(CRITERIA_TEXT, 'DOCUMENT', 'SAP_GXY.20250407')
+FROM CLINICAL_TRIALS
+WHERE CRITERIA_TEXT IS NOT NULL
+  AND CRITERIA_TEXT != '';
+  </code></pre>
+  <p style="font-size:0.65em; color:#aaa; margin-top:0.6em;">
+    <b>SAP_GXY.20250407</b> is a SAP-provided multilingual embedding model (<b>768 dims</b>, 512 token default limit) available on HANA Cloud instances with Script Server enabled.
+  </p>
+  <p style="font-size:0.6em; color:#888;">
+    Docs: <a href="https://help.sap.com/docs/hana-cloud-database/sap-hana-cloud-sap-hana-database-vector-engine-guide">HANA Cloud Vector Engine Guide</a>
+  </p>
+</section>
+
+<!-- SEMANTIC SIMILARITY SEARCH -->
+<section>
+  <h2>Semantic Similarity Search</h2>
+  <pre><code class="language-sql">
+-- Find trials semantically similar to a free-text query
+-- Step 1: embed the query string inline
+-- VECTOR_EMBEDDING(text, 'DOCUMENT', model_id) → REAL_VECTOR
+SELECT TOP 10
+    NCT_ID,
+    COSINE_SIMILARITY(
+        EMBEDDING,
+        VECTOR_EMBEDDING(
+            'elderly patients with heart failure and diabetes',
+            'DOCUMENT',
+            'SAP_GXY.20250407'
+        )
+    ) AS SIMILARITY
+FROM TRIAL_EMBEDDINGS
+ORDER BY SIMILARITY DESC;
+  </code></pre>
+  <div class="card" style="margin-top:0.8em; font-size:0.72em;">
+    <b>Use case:</b> an LLM agent translates a natural-language question into a query string, embeds it inline, and retrieves semantically relevant trials — no keyword matching needed.
+  </div>
+</section>
+
+<!-- EMBEDDINGS FROM PYTHON -->
+<section>
+  <h2>Embeddings from Python</h2>
+  <pre><code class="language-python">
+# Use a cursor to run the INSERT ... SELECT directly from Python
+cursor = cc.connection.cursor()
+cursor.execute("""
+    INSERT INTO TRIAL_EMBEDDINGS (NCT_ID, EMBEDDING)
+    SELECT NCT_ID,
+           VECTOR_EMBEDDING(CRITERIA_TEXT, 'DOCUMENT', 'SAP_GXY.20250407')
+    FROM CLINICAL_TRIALS
+    WHERE CRITERIA_TEXT IS NOT NULL
+      AND CRITERIA_TEXT != ''
+""")
+cc.connection.commit()
+cursor.execute("SELECT COUNT(*) FROM TRIAL_EMBEDDINGS")
+print("Embedded rows:", cursor.fetchone()[0])
+cursor.close()
+  </code></pre>
+  <p style="font-size:0.65em; color:#aaa; margin-top:0.5em;">
+    All computation runs inside HANA — no text is sent to Python over the wire.
+    Python only sends the call and receives confirmation — no text is serialised over the wire.
+  </p>
+</section>
+
+<!-- EXERCISE 2 -->
+<section data-background-color="#0d1f2d">
+  <h2>Exercise 2</h2>
+  <h3 style="color:#7ec8e3;">Semantic Search with Embeddings</h3>
+  <ul style="font-size:0.82em; margin-top:1em;">
+    <!-- <li>Open <code>exercises/02_embeddings_nlp.py</code></li> -->
+    <li>Generate vector embeddings for all eligibility criteria texts</li>
+    <li>Implement a <code>find_similar_trials(query, top_k=5)</code> function</li>
+    <li>Test it with 3 different natural-language queries</li>
+    <li><b>Bonus:</b> visualize the embedding space with t-SNE</li>
+  </ul>
+  <div class="card" style="margin-top:1.5em; font-size:0.7em;">
+    <b>Expected output:</b> for a text query, return the 5 most semantically similar trials with their NCT IDs and similarity scores.
+  </div>
+</section>
+
+<!-- PAL INTRO -->
+<section data-background-gradient="radial-gradient(ellipse at bottom right, #1a0a00 0%, #000 80%)">
+  <h2>Predictive Analysis Library <span class="sap-badge pal-badge">PAL</span></h2>
+  <p style="font-size:0.78em; color:#f0c060;">In-database machine learning — SQL-callable algorithms</p>
+  <div class="three-col" style="margin-top:1em;">
+    <div class="card">
+      <h4>Why in-database ML?</h4>
+      <ul style="font-size:0.88em;">
+        <li>No data movement</li>
+        <li>No ETL pipeline</li>
+        <li>Model stored in HANA</li>
+        <li>Scoring runs as SQL</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Available via</h4>
+      <ul style="font-size:0.88em;">
+        <li>Stored procedures (SQL)</li>
+        <li><code>hana-ml</code> Python API</li>
+        <li>HANA Modeler (GUI)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Trial availability</h4>
+      <ul style="font-size:0.88em;">
+        <li>✅ Fully included</li>
+        <li>Requires <b>Script Server</b> enabled (free)</li>
+        <li>Same algorithms as production</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- PAL ALGORITHM CATEGORIES -->
+<section>
+  <h2>PAL Algorithm Categories</h2>
+  <table class="pal-table">
+    <tr><th>Category</th><th>Algorithms</th><th>Our Use</th></tr>
+    <tr><td>Classification</td><td>Random Forest, GBT, SVM, Naive Bayes, KNN, Decision Tree, MLP</td><td>Dropout category (low/med/high)</td></tr>
+    <tr><td>Regression</td><td>Linear, Ridge, Lasso, Random Forest Reg, GBT Reg</td><td>Numeric dropout rate prediction</td></tr>
+    <tr><td>Clustering</td><td>K-Means, DBSCAN, Hierarchical, Spectral</td><td>Trial type clusters</td></tr>
+    <tr><td>Time Series</td><td>ARIMA, Exponential Smoothing, Holt-Winters</td><td>Enrollment trend</td></tr>
+    <tr><td>Association</td><td>Apriori, FP-Growth</td><td>Co-occurring conditions</td></tr>
+    <tr><td>Statistics</td><td>Correlation, PCA, Chi-square, ANOVA</td><td>Feature selection</td></tr>
+  </table>
+  <p style="font-size:0.6em; color:#888; margin-top:0.8em;">
+    Docs: <a href="https://help.sap.com/docs/hana-cloud-database/sap-hana-cloud-sap-hana-database-predictive-analysis-library-pal/predictive-analysis-library-pal">PAL Documentation</a>
+  </p>
+</section>
+
+<!-- ML PIPELINE DIAGRAM -->
+<section>
+  <h2 style="margin-bottom:0.2em;">ML Pipeline</h2>
+  <p style="font-size:0.7em; color:#aaa; margin-bottom:0.4em;">from raw API data to predictions — end to end inside SAP HANA Cloud</p>
+  <div class="mermaid">
+%%{init: {'theme': 'base', 'themeVariables': {
+  'primaryColor': '#0d2a45',
+  'primaryTextColor': '#c8e0ff',
+  'primaryBorderColor': '#0070f2',
+  'lineColor': '#7ec8e3',
+  'secondaryColor': '#0d2a45',
+  'tertiaryColor': '#071826',
+  'edgeLabelBackground': '#071826',
+  'clusterBkg': '#071826',
+  'clusterBorder': '#0070f2',
+  'titleColor': '#c8e0ff',
+  'nodeTextColor': '#c8e0ff',
+  'fontFamily': 'Arial, sans-serif'
+}}}%%
+flowchart LR
+
+    subgraph ing ["① Ingestion Pipeline"]
+        CT["ClinicalTrials.gov API\npaginated fetch · projection"]
+    end
+
+    HANA[("SAP HANA\nCloud")]
+
+    subgraph ml ["② Train / Evaluate"]
+        direction LR
+        SPLIT(["Train / Test\nSplit  80/20"])
+        TRAINSET["Training\nSet  80%"]
+        TESTSET["Test Set  20%"]
+        MODEL["Statistical\nModel"]
+        MTABLE[("Model\nTable")]
+        PRED["Predictions\n(target value)"]
+        SPLIT --> TRAINSET
+        SPLIT --> TESTSET
+        TRAINSET --> MODEL --> MTABLE
+        MTABLE -- "apply model" --> PRED
+        TESTSET --> PRED
+    end
+
+    ing -- "paginated fetch\n+ projection" --> HANA
+    HANA --> SPLIT
+
+    classDef server fill:#001f40,stroke:#0070f2,stroke-width:2px,color:#a0d4ff
+    classDef db     fill:#1c1400,stroke:#f0ab00,stroke-width:2px,color:#f0d080
+    classDef mnode  fill:#001a00,stroke:#4caf50,stroke-width:2px,color:#90ee90
+    classDef pnode  fill:#1a0030,stroke:#a070d0,stroke-width:2px,color:#ce93d8
+    classDef spnode fill:#071826,stroke:#7ec8e3,stroke-width:2px,color:#a0d4ff
+
+    class CT server
+    class HANA db
+    class MTABLE mnode
+    class PRED pnode
+    class SPLIT spnode
+  </div>
+</section>
+
+<!-- TRAINING A MODEL — SQL & PAL -->
+<section>
+  <h2 style="margin-bottom:0.2em;">Training a Model — SQL &amp; PAL</h2>
+  <p style="font-size:0.65em; color:#aaa; margin:0 0 0.5em;">models can be trained directly from SQL using PAL stored procedures</p>
+  <div style="display:flex; gap:1.5em; align-items:flex-start; height:540px;">
+    <div style="flex:0 0 36%; height:100%; overflow:hidden;">
+      <div class="mermaid">
+%%{init: {'theme': 'base', 'themeVariables': {
+  'primaryColor': '#0d2a45', 'primaryTextColor': '#c8e0ff',
+  'primaryBorderColor': '#0070f2', 'lineColor': '#7ec8e3',
+  'secondaryColor': '#0d2a45', 'tertiaryColor': '#071826',
+  'edgeLabelBackground': '#071826', 'clusterBkg': '#071826',
+  'clusterBorder': '#0070f2', 'titleColor': '#c8e0ff',
+  'nodeTextColor': '#c8e0ff', 'fontFamily': 'Arial, sans-serif',
+  'fontSize': '12px'
+}}}%%
+flowchart TD
+    DATA[("TRIALS_TRAIN\nHANA Table")]
+    PARAM["#PAL_PARAM_TBL\nITER_NUM · ETA\nMAX_DEPTH"]
+    CALL(["CALL _SYS_AFL\n.PAL_HGBT_TRAIN()"])
+    MODEL[("MODEL_TBL\nstored in HANA")]
+    PRED["CALL PAL_HGBT_PREDICT()\non new data"]
+    DATA --> CALL
+    PARAM --> CALL
+    CALL --> MODEL
+    MODEL --> PRED
+    classDef db   fill:#1c1400,stroke:#f0ab00,stroke-width:2px,color:#f0d080
+    classDef proc fill:#001a00,stroke:#4caf50,stroke-width:2px,color:#90ee90
+    classDef parm fill:#0d2a45,stroke:#0070f2,stroke-width:2px,color:#c8e0ff
+    classDef pred fill:#1a0030,stroke:#a070d0,stroke-width:2px,color:#ce93d8
+    class DATA,MODEL db
+    class CALL proc
+    class PARAM parm
+    class PRED pred
+      </div>
+    </div>
+    <div style="flex:1; height:100%; overflow:hidden;">
+      <pre style="font-size:0.30em; margin:0; height:100%; overflow:hidden; border-radius:6px;"><code class="language-sql" style="max-height:none;">-- 1. Parameter table (controls the algorithm)
+CREATE LOCAL TEMPORARY COLUMN TABLE #PAL_PARAM_TBL (
+  "PARAM_NAME"   NVARCHAR(256),
+  "INT_VALUE"    INTEGER,
+  "DOUBLE_VALUE" DOUBLE,
+  "STRING_VALUE" NVARCHAR(1000)
+);
+INSERT INTO #PAL_PARAM_TBL VALUES ('ITER_NUM',    200,  NULL, NULL);
+INSERT INTO #PAL_PARAM_TBL VALUES ('ETA',         NULL, 0.05, NULL);
+INSERT INTO #PAL_PARAM_TBL VALUES ('MAX_DEPTH',   4,    NULL, NULL);
+INSERT INTO #PAL_PARAM_TBL VALUES ('SPLIT_METHOD',NULL, NULL,'histogram');
+
+-- 2. Output table (receives the trained model)
+CREATE COLUMN TABLE MODEL_TBL (
+  "ROW_INDEX"     INTEGER,
+  "TREE_INDEX"    INTEGER,
+  "MODEL_CONTENT" NCLOB
+);
+
+-- 3. Train  (XGBoost / Hybrid Gradient Boosting Trees)
+CALL _SYS_AFL.PAL_HGBT_TRAIN(
+  TRIALS_TRAIN,    -- input data (must include label column)
+  #PAL_PARAM_TBL,  -- parameters
+  MODEL_TBL        -- ← model written here
+) WITH OVERVIEW;
+
+-- 4. Predict on new data
+CALL _SYS_AFL.PAL_HGBT_PREDICT(
+  TRIALS_TEST,     -- data to score
+  MODEL_TBL,       -- trained model
+  #PAL_PARAM_TBL,  -- scoring parameters
+  RESULT_TBL       -- ← predictions written here
+) WITH OVERVIEW;</code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- TRAINING A MODEL — PYTHON & hana-ml -->
+<section>
+  <h2 style="margin-bottom:0.2em;">Training a Model — Python &amp; hana-ml</h2>
+  <p style="font-size:0.65em; color:#aaa; margin:0 0 0.5em;">same PAL algorithms, wrapped in a Python-friendly API — data stays in HANA</p>
+  <div style="display:flex; gap:1.5em; align-items:flex-start; height:540px;">
+    <div style="flex:0 0 36%; height:100%; overflow:hidden;">
+      <div class="mermaid">
+%%{init: {'theme': 'base', 'themeVariables': {
+  'primaryColor': '#0d2a45', 'primaryTextColor': '#c8e0ff',
+  'primaryBorderColor': '#0070f2', 'lineColor': '#7ec8e3',
+  'secondaryColor': '#0d2a45', 'tertiaryColor': '#071826',
+  'edgeLabelBackground': '#071826', 'clusterBkg': '#071826',
+  'clusterBorder': '#0070f2', 'titleColor': '#c8e0ff',
+  'nodeTextColor': '#c8e0ff', 'fontFamily': 'Arial, sans-serif',
+  'fontSize': '12px'
+}}}%%
+flowchart TD
+    CC["ConnectionContext\n(hana_ml)"]
+    HDF[("HANA DataFrame\ncc.table('TRIALS_TRAIN')")]
+    GBR["HybridGradientBoosting\nRegressor(n_estimators=200)"]
+    FIT(["gbr.fit(\n  data, features,\n  label, key\n)"])
+    MODEL[("Model Table\nstored in HANA")]
+    PREDS["gbr.predict(hdf_test)"]
+    CC --> HDF
+    HDF --> FIT
+    GBR --> FIT
+    FIT --> MODEL
+    MODEL --> PREDS
+    classDef conn fill:#0d2a45,stroke:#0070f2,stroke-width:2px,color:#c8e0ff
+    classDef db   fill:#1c1400,stroke:#f0ab00,stroke-width:2px,color:#f0d080
+    classDef obj  fill:#001a00,stroke:#4caf50,stroke-width:2px,color:#90ee90
+    classDef fit  fill:#071826,stroke:#7ec8e3,stroke-width:2px,color:#a0d4ff
+    classDef pred fill:#1a0030,stroke:#a070d0,stroke-width:2px,color:#ce93d8
+    class CC conn
+    class HDF,MODEL db
+    class GBR obj
+    class FIT fit
+    class PREDS pred
+      </div>
+    </div>
+    <div style="flex:1; height:100%; overflow:hidden;">
+      <pre style="font-size:0.40em; margin:0; height:100%; overflow:hidden; border-radius:6px;"><code class="language-python" style="max-height:none;">from hana_ml.dataframe import ConnectionContext
+from hana_ml.algorithms.pal.trees import HybridGradientBoostingRegressor
+
+cc = ConnectionContext('your-hana.hanacloud.ondemand.com',
+                       port=443, user='ML_USER', password='...')
+
+FEATURES = ["PHASE_ENC", "STUDY_TYPE_ENC", "ENROLLMENT",
+            "DURATION_DAYS", "CRITERIA_LEN"]
+TARGET = "DROPOUT_RATE"
+
+hdf_train = cc.table("TRIALS_TRAIN")  # HANA DataFrame — stays in DB
+hdf_test  = cc.table("TRIALS_TEST")
+
+gbr = HybridGradientBoostingRegressor(
+    n_estimators=200, learning_rate=0.05, max_depth=4
+)
+# runs as PAL_HGBT_TRAIN stored procedure inside HANA
+gbr.fit(data=hdf_train, features=FEATURES, label=TARGET, key="NCT_ID")
+
+preds = gbr.predict(data=hdf_test, key="NCT_ID")
+print(gbr.feature_importances_.collect())</code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- PAL IN PYTHON — SCORING & EVALUATION -->
+ <!--
+<section>
+  <h2>PAL in Python — Scoring &amp; Evaluation</h2>
+  <pre><code class="language-python">
+import pandas as pd
+
+hdf_test   = cc.table("TRIALS_TEST")
+preds      = gbr.predict(data=hdf_test, features=FEATURES, key="NCT_ID")
+
+# Save to temp tables, then collect via cursor to avoid SQL nesting issues
+preds.rename_columns({"SCORE": "PREDICTED_DROPOUT"}).save("#PREDS", force=True)
+hdf_test.select("NCT_ID", TARGET).save("#ACTUALS", force=True)
+
+cursor = cc.connection.cursor()
+cursor.execute(f"""
+    SELECT a.{TARGET}, p.PREDICTED_DROPOUT
+    FROM "#ACTUALS" a JOIN "#PREDS" p ON a.NCT_ID = p.NCT_ID
+""")
+df = pd.DataFrame(cursor.fetchall(), columns=[TARGET, "PREDICTED_DROPOUT"])
+df[TARGET]              = pd.to_numeric(df[TARGET])
+df["PREDICTED_DROPOUT"] = pd.to_numeric(df["PREDICTED_DROPOUT"])
+cursor.close()
+
+residuals = df[TARGET] - df["PREDICTED_DROPOUT"]
+print(f"MAE:  {residuals.abs().mean():.4f}")
+print(f"RMSE: {(residuals**2).mean()**0.5:.4f}")
+ss_res = (residuals**2).sum()
+ss_tot = ((df[TARGET] - df[TARGET].mean())**2).sum()
+print(f"R²:   {1 - ss_res/ss_tot:.4f}")
+  </code></pre>
+  <div class="card" style="margin-top:0.8em; font-size:0.72em;">
+    Note: <code>HybridGradientBoostingRegressor</code> keeps the model in the session.
+    Persist predictions or feature importances to HANA tables if you need them later.
+  </div>
+</section>
+-->
+
+<!-- FEATURE IMPORTANCE -->
+<!-- <section>
+  <h2>Feature Importance</h2>
+  <pre><code class="language-python">
+import matplotlib.pyplot as plt
+
+fi = gbr.feature_importances_.collect()
+fi = fi.sort_values("IMPORTANCE", ascending=True)
+
+fig, ax = plt.subplots(figsize=(7, 4))
+ax.barh(fi["VARIABLE_NAME"], fi["IMPORTANCE"], color="#0070f2")
+ax.set_xlabel("Feature Importance (gain)")
+ax.set_title("Dropout Rate — GBT Feature Importances")
+plt.tight_layout()
+plt.savefig("feature_importance.png", dpi=150)
+  </code></pre>
+  <p style="font-size:0.7em; color:#aaa; margin-top:0.6em;">
+    Typical result: <b>DURATION_DAYS</b>, <b>ENROLLMENT</b>, and <b>PHASE_ENC</b> are the top predictors of dropout.
+  </p>
+</section> -->
+
+<!-- EXERCISE 3 -->
+<section data-background-color="#0d1f2d">
+  <h2>Exercise 3</h2>
+  <h3 style="color:#7ec8e3;">Predict Dropout Rate with PAL — Two Variants</h3>
+  <div class="two-col" style="font-size:0.75em; gap:1.2em;">
+    <div class="card" style="border-color: #0070f2;">
+      <h4 style="color:#7ec8e3;">Variant A — Global model</h4>
+      <ul style="margin:0.3em 0 0; padding-left:1.2em;">
+        <li>Encode features &amp; split 80/20</li>
+        <li>Train PAL <code>HybridGradientBoostingRegressor</code> on <b>all</b> trials</li>
+        <li>Evaluate MAE &amp; R² on held-out test set</li>
+        <li>Plot feature importances</li>
+      </ul>
+    </div>
+    <div class="card" style="border-color: var(--sap-gold);">
+      <h4 style="color:#f0c060;">Variant B — Similarity-filtered local model</h4>
+      <ul style="margin:0.3em 0 0; padding-left:1.2em;">
+        <li>Pick a query trial (NCT ID)</li>
+        <li>Find its <b>K=100 nearest neighbours</b> via <code>COSINE_SIMILARITY</code></li>
+        <li>Train PAL GBT on that neighbourhood only</li>
+        <li>Predict dropout for the query trial</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card" style="margin-top:0.8em; font-size:0.7em;">
+    <b>Comparison:</b> share your MAE with the other group — did the local model beat the global one? Discuss why or why not.
+  </div>
+</section>
+
+<!-- FROM DECISION TREES TO GRADIENT BOOSTING -->
+<!-- <section>
+  <h2>From Decision Trees to Gradient Boosting</h2>
+  <div class="two-col" style="margin-top:0.6em; font-size:0.78em;">
+    <div class="card">
+      <h4>Decision Tree</h4>
+      <p>Splits data on feature thresholds to form a tree of yes/no rules.</p>
+      <pre style="font-size:0.82em; margin:0.5em 0 0;">
+DURATION_DAYS > 730?
+  ├─ Yes → PHASE3?
+  │         ├─ Yes  → dropout ≈ 0.22
+  │         └─ No   → dropout ≈ 0.13
+  └─ No  → dropout ≈ 0.08
+      </pre>
+      <p style="margin-top:0.5em; color:#f0ab00;">Fast, interpretable — but high variance (overfits easily).</p>
+    </div>
+    <div class="card">
+      <h4>Gradient Boosting</h4>
+      <p>Builds <b>many shallow trees sequentially</b>. Each tree corrects the errors of the previous ensemble.</p>
+      <p style="text-align:center; color:var(--sap-gold); margin:0.5em 0;">
+        F<sub>m</sub>(x) = F<sub>m-1</sub>(x) + η · h<sub>m</sub>(x)
+      </p>
+      <ul style="margin:0.4em 0 0; font-size:0.92em;">
+        <li>η = learning rate (shrinks each step)</li>
+        <li>h<sub>m</sub> = new tree fitted on residuals</li>
+        <li>200 trees × depth 4 = strong ensemble</li>
+      </ul>
+      <p style="margin-top:0.5em; color:#7ec8e3;">Low bias, controlled variance — state-of-the-art on tabular data.</p>
+    </div>
+  </div>
+</section> -->
+
+<!-- WHY GBT BEATS LINEAR REGRESSION -->
+<!-- <section>
+  <h2>Why GBT Beats Linear Regression Here</h2>
+  <div class="three-col" style="font-size:0.78em; margin-top:0.8em;">
+    <div class="card">
+      <h4>Non-linearity</h4>
+      <p>Dropout doesn't increase linearly with duration — it jumps sharply after ~2 years. Trees capture this naturally; linear models need manual feature engineering.</p>
+    </div>
+    <div class="card">
+      <h4>Interactions</h4>
+      <p>A Phase 3 trial with Industry sponsor + 3 arms is riskier than any single feature alone. GBT automatically learns these cross-feature interactions via tree splits.</p>
+    </div>
+    <div class="card">
+      <h4>Mixed feature types</h4>
+      <p>We have ordinals (phase), nominals (sponsor), counts (n_arms), and continuous (duration). GBT handles them all without scaling or one-hot encoding.</p>
+    </div>
+  </div>
+  <div class="card" style="margin-top:0.8em; font-size:0.75em;">
+    <b>PAL advantage:</b> the entire 200-tree fit runs as a single SQL procedure call inside HANA.
+    No data is serialised to Python — even a dataset with millions of rows trains without memory pressure on the client.
+  </div>
+</section> -->
+
+<!-- EVALUATION METRICS -->
+<section>
+  <h2>Evaluation Metrics</h2>
+  <div class="three-col" style="font-size:0.78em; margin-top:0.7em;">
+    <div class="card">
+      <h4>MAE — Mean Absolute Error</h4>
+      <p style="text-align:center; color:var(--sap-gold); font-size:1.05em; margin:0.4em 0;">
+        MAE = mean( |y − ŷ| )
+      </p>
+      <p>Average error in the same units as the target (dropout rate 0–1).</p>
+      <p><b>MAE = 0.08</b> means we're off by 8 percentage points on average — for a 200-patient trial that's ±16 patients.</p>
+      <p style="color:#7ec8e3; margin-top:0.4em;">Robust to outliers. Easy to explain to stakeholders.</p>
+    </div>
+    <div class="card">
+      <h4>RMSE — Root Mean Squared Error</h4>
+      <p style="text-align:center; color:var(--sap-gold); font-size:1.05em; margin:0.4em 0;">
+        RMSE = √mean( (y − ŷ)² )
+      </p>
+      <p>Like MAE but penalises large errors more heavily.</p>
+      <p>If RMSE &gt;&gt; MAE, the model has occasional large misses on some trial types.</p>
+      <p style="color:#7ec8e3; margin-top:0.4em;">Use when big errors are especially costly.</p>
+    </div>
+    <div class="card">
+      <h4>R² — Coefficient of Determination</h4>
+      <p style="text-align:center; color:var(--sap-gold); font-size:1.05em; margin:0.4em 0;">
+        R² = 1 − SS<sub>res</sub> / SS<sub>tot</sub>
+      </p>
+      <p>Fraction of variance in dropout rate explained by the model.</p>
+      <ul style="margin:0.4em 0 0;">
+        <li>R² = 1.0 → perfect prediction</li>
+        <li>R² = 0.0 → no better than predicting the mean</li>
+        <li>R² &lt; 0 → worse than the mean</li>
+      </ul>
+      <!-- <p style="color:#7ec8e3; margin-top:0.4em;">Target: R² &gt; 0.55 for this dataset.</p> -->
+    </div>
+  </div>
+</section>
+
+<!-- FEATURE IMPORTANCE (ML THEORY) -->
+<!-- <section>
+  <h2>Feature Importance</h2>
+  <div class="two-col" style="font-size:0.78em; margin-top:0.6em;">
+    <div class="card">
+      <h4>What it measures</h4>
+      <p>For each feature, sum the reduction in squared error achieved by all splits on that feature across all 200 trees.</p>
+      <p style="margin-top:0.5em;">A high importance means the model relies heavily on that feature to separate high-dropout from low-dropout trials.</p>
+      <p style="color:var(--sap-gold); margin-top:0.5em;">Expected top features:<br>
+        DURATION_DAYS · ENROLLMENT · PHASE_ENC
+      </p>
+    </div>
+    <div class="card">
+      <h4>How to read it</h4>
+      <pre style="font-size:0.82em; margin:0;">
+DURATION_DAYS   ████████████ 0.31
+ENROLLMENT      ████████     0.21
+PHASE_ENC       ██████       0.16
+N_INTERVENTIONS ████         0.11
+SPONSOR_ENC     ███          0.09
+CRITERIA_LEN    ██           0.07
+...
+      </pre>
+      <p style="margin-top:0.5em;">Importances sum to 1. Low-importance features can be removed to simplify the model without hurting accuracy much.</p>
+    </div>
+  </div>
+</section> -->
+
+<!-- LLMs + IN-DATABASE ML -->
+<section>
+  <h2>LLMs + In-Database ML</h2>
+  <p style="font-size:0.8em; color:#a0d4ff;">Two different roles — both essential</p>
+  <div class="two-col" style="margin-top:1em;">
+    <div class="card">
+      <h4>PAL / HANA (structured)</h4>
+      <ul style="font-size:0.88em;">
+        <li>Trains on thousands of rows</li>
+        <li>Consistent, reproducible predictions</li>
+        <li>Explainable feature importances</li>
+        <li>Runs at query time in SQL</li>
+        <li>Data governance stays in DB</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>LLM (unstructured)</h4>
+      <ul style="font-size:0.88em;">
+        <li>Understands free-text criteria</li>
+        <li>Generates embeddings for similarity</li>
+        <li>Explains predictions in plain language</li>
+        <li>Suggests retention strategies</li>
+        <li>Answers analyst questions in NL</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- THE GenAI + HANA PATTERN -->
+
+
+<!-- WHAT WE BUILT TODAY -->
+<!-- <section>
+  <h2>What We Built Today</h2>
+  <div class="three-col" style="margin-top:1em; font-size:0.82em;">
+    <div class="card">
+      <h4>Data Pipeline</h4>
+      <p>Real-world REST API &rarr; feature engineering &rarr; HANA Cloud table</p>
+    </div>
+    <div class="card">
+      <h4>NLP Layer</h4>
+      <p>Built-in embeddings &rarr; REAL_VECTOR column &rarr; semantic search in SQL</p>
+    </div>
+    <div class="card">
+      <h4>ML Layer</h4>
+      <p>PAL GBT Regressor &rarr; dropout prediction &rarr; feature importances stored in DB</p>
+    </div>
+  </div>
+  <div class="card" style="margin-top:1em; font-size:0.78em;">
+    <h4>The Full Stack</h4>
+    <p style="text-align:center;">
+      <code>ClinicalTrials API</code> &rarr;
+      <code>Python / pandas</code> &rarr;
+      <code>HANA Cloud</code> &rarr;
+      <code>PAL</code> &amp; <code>VECTOR_EMBEDDING()</code> &rarr;
+      <code>LLM explanation</code>
+    </p>
+  </div>
+</section> -->
+
+<!-- KEY TAKEAWAYS -->
+<section>
+  <h2>Key Takeaways</h2>
+  <ul style="font-size:0.82em; line-height:1.8;">
+    <li>In-memory databases enable <b>real-time analytics</b> at scale without moving data</li>
+    <li>PAL runs ML <b>inside the database</b> — no separate ML cluster needed</li>
+    <li>Vector embeddings bring <b>semantic understanding</b> to structured databases</li>
+    <li>LLMs are most powerful when <b>grounded</b> in a reliable data layer like HANA</li>
+    <li>Real public datasets (ClinicalTrials.gov) are perfect for full-stack prototyping</li>
+    <li>The SAP HANA free tier gives you a <b>production-grade platform</b> at zero cost</li>
+  </ul>
+</section>
+
+<!-- FURTHER READING -->
+<section>
+  <h2>Further Reading &amp; Resources</h2>
+  <div class="two-col" style="font-size:0.72em;">
+    <div>
+      <p><b>SAP HANA Cloud</b></p>
+      <ul>
+        <li><a href="https://developers.sap.com/group.hana-cloud-get-started-1-trial.html">Trial Setup Tutorial</a></li>
+        <li><a href="https://help.sap.com/docs/hana-cloud-database/sap-hana-cloud-sap-hana-database-predictive-analysis-library-pal">PAL Documentation</a></li>
+        <li><a href="https://help.sap.com/docs/hana-cloud-database/sap-hana-cloud-sap-hana-database-vector-engine-guide">Vector Engine Guide</a></li>
+        <li><a href="https://github.com/SAP-samples/hana-ml-samples">hana-ml Samples on GitHub</a></li>
+        <li><a href="https://pypi.org/project/hana-ml/">hana-ml on PyPI</a></li>
+      </ul>
+    </div>
+    <div>
+      <p><b>Data &amp; APIs</b></p>
+      <ul>
+        <li><a href="https://clinicaltrials.gov/data-api">ClinicalTrials.gov Data API</a></li>
+        <li><a href="https://clinicaltrials.gov/api/v2/studies">API v2 Base URL</a></li>
+      </ul>
+      <p style="margin-top:0.8em;"><b>Papers</b></p>
+      <ul>
+        <li>Carlisle et al. (2023), JAMA: Clinical trial dropout predictors</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- THANK YOU -->
+<section data-background-gradient="radial-gradient(ellipse at top, #0d2137 0%, #000 80%)">
+  <h1 style="color:var(--sap-gold); font-size:1.8em;">Thank You!</h1>
+  <p style="color:#a0d4ff; margin-top:0.5em;">Questions &amp; Discussion</p>
+  <hr style="border-color:rgba(255,255,255,0.2); margin:1.5em auto; width:50%;">
+</section>
+
+</div><!-- /slides -->
+</div><!-- /reveal -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/notes/notes.min.js"></script>
+<script>
+  mermaid.initialize({ startOnLoad: false, theme: 'dark' });
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'slide',
+    transitionSpeed: 'fast',
+    backgroundTransition: 'fade',
+    controls: true,
+    progress: true,
+    center: true,
+    width: 1200,
+    height: 700,
+    margin: 0.04,
+    plugins: [ RevealHighlight, RevealNotes ],
+  });
+  Reveal.on('ready', function() {
+    document.querySelectorAll('.mermaid').forEach(function(el) {
+      mermaid.run({ nodes: [el] });
+    });
+  });
+</script>
+</body>
+</html>
