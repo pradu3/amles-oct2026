@@ -13,6 +13,8 @@
 3. You will receive a link to a guided workbook:
    **Basic Trial — Introduction to SAP HANA Cloud**
 
+> If there are issues with environment being accessed, also try this link as an alternative: [trial](https://cockpit.hanatrial.ondemand.com/trial/)
+
 ### Step 2 — Log in to Database Explorer
 
 Inside the workbook, navigate to:
