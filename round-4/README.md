@@ -56,6 +56,6 @@ During your walkthrough, explicitly address:
 - Presentation Format & Schedule
 
 
-Total Time per Team: 6 minutes
+Total Time per Individual: 6 minutes
 Part 1 (Pitch): 1 minute
 Part 2 (Prototype Walkthrough & Demo): 5 minutes
